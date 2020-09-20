@@ -1,48 +1,60 @@
-set numberwidth=1
-set clipboard=unnamed
-syntax enable
-set showcmd
-set ruler
-set encoding=utf-8
-set showmatch
-set sw=2
-set relativenumber
-set laststatus=2
-set noshowmode
-set cindent
+filetype plugin on
 
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.config/nvim/plugged')
 
 " Themes
-Plug 'morhetz/gruvbox'
-Plug 'phanviet/vim-monokai-pro'
-Plug 'chriskempson/base16-vim'
-Plug 'sickill/vim-monokai'
+Plug 'ayu-theme/ayu-vim'
 Plug 'kaicataldo/material.vim', { 'branch': 'main' }
-" IDE
-Plug 'easymotion/vim-easymotion'
-Plug 'scrooloose/nerdtree'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'tpope/vim-fugitive'
-Plug 'pangloss/vim-javascript'
-Plug 'leafgarland/typescript-vim'
-Plug 'lyuts/vim-rtags'
-Plug 'kien/ctrlp.vim'
-Plug 'jremmen/vim-ripgrep'
-Plug 'mattn/emmet-vim'
+
+Plug 'ntk148v/vim-horizon'
+Plug 'sheerun/vim-polyglot'
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+Plug 'junegunn/fzf', { 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
+Plug 'prettier/vim-prettier'
+Plug 'mbbill/undotree'
+Plug 'jparise/vim-graphql'
 Plug 'mxw/vim-jsx'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'tpope/vim-commentary'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'mhinz/vim-signify'
+Plug 'tpope/vim-fugitive'
+Plug 'scrooloose/nerdcommenter'
+Plug 'b4b4r07/vim-hcl'
+Plug 'fatih/vim-hclfmt'
+Plug 'ekalinin/dockerfile.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'scrooloose/nerdtree'   
+Plug 'terryma/vim-multiple-cursors'
+Plug 'epilande/vim-react-snippets'
+Plug 'mattn/emmet-vim'
 
 call plug#end()
 
-" let g:gruvbox_contrast_dark = 'hard'
-let g:jsx_ext_required = 1
-let g:material_theme_style = 'darker' 
+syntax on
+let g:material_theme_style = 'darker'
 colorscheme material
-let g:airline_theme = 'material'
-let NERDTreeQuitOnOpen=1
-let g:NERDTreeIgnore = ['^node_modules$']
-let mapleader=" "
+" highlight Pmenu ctermbg=111217 guibg=#111217
+set splitright
+set updatetime=100
+set hidden
+set nobackup
+set nowritebackup
+set termguicolors
+set shortmess+=c
+set clipboard=unnamed
+set signcolumn=yes
+set encoding=utf-8
+set t_Co=256
+set noerrorbells
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set nowrap
+set number
+set noshowmode
+set relativenumber
 
 " For Neovim 0.1.3 and 0.1.4 - https://github.com/neovim/neovim/pull/2198
 if (has('nvim'))
@@ -56,56 +68,93 @@ if (has('termguicolors'))
   set termguicolors
 endif
 
+" Emmet
+let g:user_emmet_mode='n'
+let g:user_emmet_leader_key=','
+let g:user_emmet_jsx = 1
 
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
+" NERDTree
+let NERDTreeQuitOnOpen=1
+let g:NERDTreeIgnore = ['^node_modules$']
+
+let g:coc_disable_startup_warning = 1
+let g:go_version_warning = 0
+
+" airline
+let g:airline_theme = "base16_spacemacs"
+
+" ayu
+let ayucolor="dark"
+
+" fzf.vim
+let g:fzf_preview_window = ''
+
+" hclfmt
+let g:hcl_fmt_autosave = 1
+let g:tf_fmt_autosave = 1
+let g:nomad_fmt_autosave = 1
+
+" go
+let g:go_fmt_command = "goimports"
+let g:go_highlight_array_whitespace_error = 0
+let g:go_highlight_chan_whitespace_error = 0
+let g:go_highlight_extra_types = 0
+let g:go_highlight_space_tab_error = 0
+let g:go_highlight_trailing_whitespace_error = 0
+let g:go_highlight_operators = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_parameters = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_generate_tags = 1
+let g:go_highlight_variable_declarations = 1
+let g:go_highlight_variable_assignments = 1
+
+" horizon
+let g:lightline = {'colorscheme' : 'horizon'}
+
+" nerdcommenter
+let g:NERDSpaceDelims = 1
+let g:NERDCompactSexyComs = 1
+let g:NERDTrimTrailingWhitespace = 1
+
+" Let definitions
+let mapleader = " "
+
+" prettier
+let g:prettier#config#bracket_spacing = 'true'
+let g:prettier#config#jsx_bracket_same_line = 'false'
 let g:prettier#autoformat = 0
-let g:coc_global_extensions = [
-  \ 'coc-snippets',
-  \ 'coc-pairs',
-  \ 'coc-tsserver',
-  \ 'coc-eslint', 
-  \ 'coc-prettier', 
-  \ 'coc-json', 
-  \ ]
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
 
-nmap <Leader>s <Plug>(easymotion-s2)
-nmap <Leader>nt :NERDTreeFind<CR>
+" graphql
+au BufNewFile,BufRead *.prisma setfiletype graphql
+
+" vim-jsx
+autocmd BufRead,BufNewFile *.tsx setlocal syntax=javascript.jsx
+
+" Basic remaps.  This is where the magic of vim happens
+nmap <leader>h :wincmd h<CR>
+nmap <leader>j :wincmd j<CR>
+nmap <leader>k :wincmd k<CR>
+nmap <leader>l :wincmd l<CR>
 nmap <Leader>+ :vertical resize +5<CR>
 nmap <Leader>- :vertical resize -5<CR>
-nmap <Leader>rp :resize 100<CR>
+nmap <leader>u :UndotreeShow<CR>
 nmap <Leader>w :w<CR>
 nmap <Leader>q :q<CR>
+nmap <C-p> :Files<CR>
+nmap <s-p> :Rg<CR>
 
-" TextEdit might fail if hidden is not set.
-set hidden
+" NERDTree
+nmap <Leader>nt :NERDTreeFind<CR>
 
-" Some servers have issues with backup files, see #649.
-set nobackup
-set nowritebackup
-
-" Give more space for displaying messages.
-set cmdheight=2
-
-" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
-" delays and poor user experience.
-set updatetime=300
-
-" Don't pass messages to |ins-completion-menu|.
-set shortmess+=c
-
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
-if has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
+" go
+au FileType go nmap <leader>rv <Plug>(go-run-vertical)
 
 " Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
@@ -118,23 +167,18 @@ function! s:check_back_space() abort
 endfunction
 
 " Use <c-space> to trigger completion.
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
+inoremap <silent><expr> <c-space> coc#refresh()
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.
-" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
-if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
+"if has('patch8.1.1068')
+  " Use `complete_info` if your (Neo)Vim version supports it.
+  "inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+"else
+  "imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+"endif
 
 " Use `[g` and `]g` to navigate diagnostics
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
@@ -178,26 +222,23 @@ augroup end
 xmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>a  <Plug>(coc-codeaction-selected)
 
-" Remap keys for applying codeAction to the current buffer.
+" Remap keys for applying codeAction to the current line.
 nmap <leader>ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
 nmap <leader>qf  <Plug>(coc-fix-current)
 
-" Map function and class text objects
+" Introduce function text object
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
 xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
 xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
 omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
 
-" Use CTRL-S for selections ranges.
-" Requires 'textDocument/selectionRange' support of LS, ex: coc-tsserver
-nmap <silent> <C-s> <Plug>(coc-range-select)
-xmap <silent> <C-s> <Plug>(coc-range-select)
+" Use <TAB> for selections ranges.
+" NOTE: Requires 'textDocument/selectionRange' support from the language server.
+" coc-tsserver, coc-python are the examples of servers that support it.
+nmap <silent> <TAB> <Plug>(coc-range-select)
+xmap <silent> <TAB> <Plug>(coc-range-select)
 
 " Add `:Format` command to format current buffer.
 command! -nargs=0 Format :call CocAction('format')
@@ -213,20 +254,20 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 " provide custom statusline: lightline.vim, vim-airline.
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
-" Mappings for CoCList
+" Mappings using CoCList:
 " Show all diagnostics.
-nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
 " Manage extensions.
-nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
 " Show commands.
-nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
 " Find symbol of current document.
-nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
 " Search workspace symbols.
-" nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
-nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
-nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
-nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
